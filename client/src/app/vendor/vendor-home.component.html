@@ -1,0 +1,59 @@
+
+<mat-card *ngIf="hideEditForm" style="margin-bottom: 1vh;">
+  <mat-card-content>
+    <mat-card-header *ngIf="vendors$ | async; else loading" class="app-accent" layout="row"  style="justify-content: center; align-items: center">
+      <mat-card-title class="app-accent" >
+
+        <img src="assets/images/logo120120.png" >
+
+      </mat-card-title>
+
+    </mat-card-header>
+
+
+    <mat-card-content>
+      <mat-list flex>
+        <app-vendor-list [vendors]="vendors$ | async" (selected)="select($event)"></app-vendor-list>
+      </mat-list>
+      <div class="padtop15">
+        <mat-icon (click)="newVendor()" matTooltip="Add New Vendor" class="addicon" color="primary" >
+          control_point
+        </mat-icon>
+      </div>
+    </mat-card-content>
+
+
+  </mat-card-content>
+
+</mat-card>
+<mat-card-footer *ngIf="hideEditForm">
+  <div align="end">
+
+    <span class="my-accent-text margin-right-5 custom-font-weight padding-top-10" >{{msg}}</span>
+  </div>
+</mat-card-footer>
+
+
+<mat-card *ngIf="!hideEditForm"  style="margin-bottom: 1vh;">
+  <mat-card-header>
+  </mat-card-header>
+  <mat-card-content>
+    <app-vendor-details [selectedVendor]="vendor"
+                         (cancelled)="cancel('cancelled')"
+                        (saved)="save($event)"
+                        (deleted)="delete($event)"
+                        [todo] ="msg">
+    </app-vendor-details>
+  </mat-card-content>
+
+</mat-card>
+
+<mat-card-footer>
+  <div align="end"  *ngIf="!hideEditForm" >
+    <span class="my-primary-text custom-font-weight margin-right-5 padding-top-10" >{{ msg }}</span>
+  </div>
+
+</mat-card-footer>
+
+<ng-template #loading class="my-primary-text">Loading Employees from server...</ng-template>
+

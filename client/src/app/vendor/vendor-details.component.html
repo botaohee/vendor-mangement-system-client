@@ -1,0 +1,135 @@
+<mat-card-header class="app-accent" layout="row"  style="justify-content: center; align-items: center">
+  <mat-card-title class="app-accent" >
+
+    <img src="assets/images/logo120120.png" >
+    <!-- <div  style="margin-top: 20%; float: right">
+       <span class="mat-headline my-primary-text " style="margin-top: 0%" > - Vendors</span>
+     </div>-->
+
+  </mat-card-title>
+
+</mat-card-header>
+
+<form [formGroup]="vendorForm" >
+
+  <div layout="row">
+    <mat-form-field flex>
+      <input matInput placeholder="Name" type="text" formControlName="name" autofocus>
+      <span *ngIf="name.errors && (name.dirty || name.touched) " >
+        <mat-icon class="md-24" style="float: right; color: rgba(255, 0, 0, 0.8)">clear</mat-icon>
+      </span>
+      <mat-error *ngIf="name.errors && (name.dirty || name.touched)" align="end" > Vendor Name is required </mat-error>
+    </mat-form-field>
+  </div>
+
+
+
+  <div layout="row">
+    <mat-form-field flex>
+      <input matInput placeholder="Email" type="email" required formControlName="email">
+      <span *ngIf="email.errors && (email.dirty || email.touched) && email.hasError('invalidEmail')" >
+        <mat-icon class="md-24" style="float: right; color: rgba(255, 0, 0, 0.8)">clear</mat-icon>
+      </span>
+      <mat-error *ngIf="email.errors && (email.dirty || email.touched)" align="end" [ngStyle]="{'color': 'red'}">
+        <p *ngIf="email.hasError('required')">Email is required.</p>
+        <p *ngIf="!email.hasError('required') && email.hasError('invalidEmail')">valid format required - x#x-x#x</p>
+      </mat-error>
+    </mat-form-field>
+
+  </div>
+
+  <div layout="row">
+    <mat-form-field flex>
+      <input matInput placeholder="Phone #" type="text" required formControlName="phone" [ngModel]="phoneChange"  (ngModelChange)="autoTransferPhoneNumber($event,false)" >
+      <span *ngIf="phone.errors && (phone.dirty || phone.touched) && phone.hasError('invalidPhone')" >
+        <mat-icon class="md-24" style="float: right; color: rgba(255,0,0,0.8)">clear</mat-icon>
+      </span>
+      <mat-error *ngIf="phone.errors && (phone.dirty || phone.touched)" align="end" [ngStyle]="{'color': 'red'}">
+        <span *ngIf="hideCharError">No character allowed</span>
+        <p *ngIf="phone.hasError('required')">Phone# is required.</p>
+        <p *ngIf="!phone.hasError('required') && phone.hasError('invalidPhone')">valid format reqiored - (###)###-####</p>
+      </mat-error>
+    </mat-form-field>
+
+  </div>
+
+  <div layout="row">
+    <mat-form-field flex>
+      <input matInput placeholder="Street Address" type="text" formControlName="address1" >
+      <span *ngIf="address1.errors && (address1.dirty || address1.touched) " >
+        <mat-icon class="md-24" style="float: right; color: rgba(255, 0, 0, 0.8)">clear</mat-icon>
+      </span>
+      <mat-error *ngIf="address1.errors && (address1.dirty || address1.touched)" align="end" > Address is required </mat-error>
+    </mat-form-field>
+  </div>
+
+  <div layout="row">
+    <mat-form-field flex>
+      <input matInput placeholder="City" type="text" formControlName="city" >
+      <span *ngIf="city.errors && (city.dirty || city.touched) " >
+        <mat-icon class="md-24" style="float: right; color: rgba(255, 0, 0, 0.8)">clear</mat-icon>
+      </span>
+      <mat-error *ngIf="city.errors && (city.dirty || city.touched)" align="end" > City is required </mat-error>
+    </mat-form-field>
+  </div>
+
+
+  <div layout="row">
+    <mat-form-field>
+      <mat-select matInput placeholder="Province" formControlName="province" flex>
+        <mat-option value="On">Ontario</mat-option>
+        <mat-option value="Qu">Quebec</mat-option>
+        <mat-option value="Ab">Alberta</mat-option>
+      </mat-select>
+      <span *ngIf="province.errors && (province.dirty || province.touched) " >
+        <mat-icon class="md-24" style="float: right; color: rgba(255, 0, 0, 0.8)">clear</mat-icon>
+      </span>
+      <mat-error *ngIf="province.errors && (province.dirty || province.touched)" align="end" > Choose a province </mat-error>
+    </mat-form-field>
+  </div>
+
+
+  <div layout="row">
+    <mat-form-field flex>
+      <input matInput placeholder="Postal Code" type="text" required formControlName="postalcode">
+      <span *ngIf="postalcode.errors && (postalcode.dirty || postalcode.touched) && postalcode.hasError('invalidPostalCode')" >
+        <mat-icon class="md-24" style="float: right; color: rgba(255, 0, 0, 0.8)">clear</mat-icon>
+      </span>
+      <mat-error *ngIf="postalcode.errors && (postalcode.dirty || postalcode.touched)" align="end" [ngStyle]="{'color': 'red'}">
+        <p *ngIf="postalcode.hasError('required')">Postal Code is required.</p>
+        <p *ngIf="!postalcode.hasError('required') && postalcode.hasError('invalidPostalCode')">valid format required - N1N-1N1</p>
+      </mat-error>
+    </mat-form-field>
+
+  </div>
+
+
+  <div layout="row">
+    <mat-form-field>
+      <mat-select matInput placeholder="Vendor type" formControlName="type" flex>
+        <mat-option value="Trusted">Trusted</mat-option>
+        <mat-option value="UnTrusted">Untrusted</mat-option>
+      </mat-select>
+      <span *ngIf="type.errors && (type.dirty || type.touched) " >
+        <mat-icon class="md-24" style="float: right; color: rgba(255, 0, 0, 0.8)">clear</mat-icon>
+      </span>
+      <mat-error *ngIf="type.errors && (type.dirty || type.touched)" align="end" > Choose a Vendor type </mat-error>
+    </mat-form-field>
+  </div>
+
+  <!--// end form  -->
+  <div class="mat-pad-sm">
+    <!--//next line-->
+    <span>
+        <button mat-raised-button type="button" (click)="updateSelectedVendor()" [disabled]="!vendorForm.valid">
+        Save
+      </button>
+</span>
+    <span>
+    <button *ngIf="selectedVendor.id" mat-raised-button type="button" (click)="openDeleteModal(selectedVendor)">Delete</button>
+    </span>
+    <span>
+      <button mat-raised-button type="button" (click)="cancelled.emit(selectedVendor)">Cancel</button>
+    </span>
+  </div>
+</form>

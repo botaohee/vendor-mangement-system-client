@@ -1,0 +1,90 @@
+<mat-card *ngIf="hideEditForm" style="margin-bottom: 1vh;">
+
+  <mat-card-header *ngIf="products$ | async; else loading" class="app-accent" layout="row"  style="justify-content: center; align-items: center">
+    <mat-card-title class="app-accent" >
+
+      <img src="assets/images/logo120120.png" >
+      <!-- <div  style="margin-top: 20%; float: right">
+         <span class="mat-headline my-primary-text " style="margin-top: 0%" > - Vendors</span>
+       </div>-->
+
+    </mat-card-title>
+
+  </mat-card-header>
+  <mat-card-content>
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
+      <ng-container matColumnDef="id">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header><div class="center-header">Product No.</div></th>
+        <td mat-cell *matCellDef="let element"> {{element.id}} </td>
+      </ng-container>
+      <!-- Date Column -->
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+          <div class="center-header">Name</div>
+        </th>
+        <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+      </ng-container>
+      <!-- Employee Id Column -->
+      <ng-container matColumnDef="vendorid">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header> <div class="center-header">Vendor</div></th>
+        <td mat-cell *matCellDef="let element"> {{element.vendorid}} </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="select(row)">></tr>
+    </table>
+    <div class="padtop15">
+      <mat-icon (click)="newProduct()" matTooltip="Add New Expense" class="addicon" color="primary" >
+        control_point
+      </mat-icon>
+    </div>
+  </mat-card-content>
+
+
+  <ng-template #loading class="my-primary-text">Loading Products from server...</ng-template>
+</mat-card>
+
+<mat-card-footer *ngIf="hideEditForm">
+  <div align="end">
+
+    <span class="my-accent-text margin-right-5 custom-font-weight" >{{msg}}</span>
+  </div>
+</mat-card-footer>
+
+
+<mat-card *ngIf="!hideEditForm" style="margin-bottom: 1vh;">
+ <!-- <mat-card-header layout="row">
+    <mat-card-title><span>{{ msg }}</span></mat-card-title>
+  </mat-card-header>-->
+  <mat-card-header  class="app-accent" layout="row"  style="justify-content: center; align-items: center">
+    <mat-card-title class="app-accent" >
+
+      <img src="assets/images/logo120120.png" >
+      <!-- <div  style="margin-top: 20%; float: right">
+         <span class="mat-headline my-primary-text " style="margin-top: 0%" > - Vendors</span>
+       </div>-->
+
+    </mat-card-title>
+
+  </mat-card-header>
+  <mat-card-content>
+    <app-product-detail [selectedProduct]="selectedProduct"
+                        [vendors]="vendors$ | async"
+                        [products]="products$ | async"
+                        (cancelled)="cancel('cancelled')"
+                        (saved)="save($event)"
+                        (deleted)="delete($event)"
+
+    >
+
+    </app-product-detail>
+
+  </mat-card-content>
+
+</mat-card>
+<mat-paginator *ngIf="!selectedProduct" [length]=size [pageSize]=5 [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+<mat-card-footer *ngIf="!hideEditForm">
+  <div align="end">
+
+    <span class="my-accent-text margin-right-5 custom-font-weight padding-top-10" >{{msg}}</span>
+  </div>
+</mat-card-footer>

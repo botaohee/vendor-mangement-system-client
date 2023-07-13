@@ -1,0 +1,89 @@
+<mat-card style="margin-bottom: 1vh;">
+  <mat-card-header class="app-accent" layout="row"  style="justify-content: center; align-items: center">
+    <mat-card-title class="app-accent" >
+      <img src="../../../assets/images/logo120120.png" >
+    </mat-card-title>
+
+  </mat-card-header>
+
+  <mat-card-content>
+    <form [formGroup]="generatorForm" novalidate>
+      <div layout="row" class="pad-left-sm pad-bottom-sm">
+        <mat-form-field flex>
+          <mat-select placeholder="Choose Vendor" formControlName="vendorid">
+            <mat-option *ngFor="let vendor of vendors$ | async" [value]="vendor">{{vendor.name}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div *ngIf="pickedVendor" layout="row" class="pad-left-sm pad-bottom-sm">
+        <mat-form-field flex>
+          <mat-select placeholder="Choose Report" formControlName="reportid" >
+            <!-- <mat-option *ngFor="let report of employeereports$ | async ; index as i"  [value]="report">{{i+1}} - {{report.datecreated | date:'d/mm/yy, h:mm a'}} </mat-option>-->
+            <mat-option *ngFor="let po of vendorpos$ | async  " [value]="po">{{po.id}} - {{po.podate | date:'short' :'-1000'}} </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <br/>
+
+      <div *ngIf="pickedReport">
+        <table style="top:-30px;position:relative;">
+          <tr>
+            <th colspan="4" class="pad-xs text-center md-subhead my-primary-text" style="font-weight:bold;padding:2vh;font-size: large;padding-bottom: 0">
+              Purchase Order: {{selectedIndex}}
+            </th>
+          </tr>
+          <tr>
+            <th colspan="4" class="pad-xs text-center my-primary-text" style="font-weight:bold;padding:2vh;font-size: xx-small;padding-top: 0">
+              Created on: {{selectedReport.podate | date:'dd/MM/yy, hh:mm a' :'-1000'}}
+            </th>
+          </tr>
+          <tr style="font-weight:bold;;background-color: #eeeeee" class="my-primary-text">
+            <td style="text-align: center;width:40%;padding-top:2vh;padding-bottom: 2vh;">Name</td>
+            <td style="text-align: center;width:10%;padding-top:2vh;padding-bottom: 2vh;">Qty</td>
+            <td style="text-align: center;width:20%;padding-top:2vh;padding-bottom: 2vh;">Cost</td>
+            <td style="text-align: center;width:20%;padding-top:2vh;padding-bottom: 2vh;">Extended</td>
+          </tr>
+          <tr *ngFor="let pro of selectedproducts; let i = index " class="my-primary-text">
+            <td class="text-left my-primary-text" style="padding-top:1vh;padding-bottom: 1vh; text-align: center">{{pro.name}}</td>
+            <td width="700" class="text-left" style="padding-top:1vh;padding-bottom: 1vh; text-align: center">{{selectedReport.items[i].qty}}</td>
+            <td style="padding-top:1vh;padding-bottom: 1vh;text-align: right">{{selectedReport.items[i].price |
+              currency:'USD':'symbol':'1.2-2'}}</td>
+            <td style="padding-top:1vh;padding-bottom: 1vh;text-align: right">{{selectedReport.items[i].price * selectedReport.items[i].qty|
+              currency:'USD':'symbol':'1.2-2'}}</td>
+
+          </tr>
+          <tr><p></tr>
+          <tr> <p></tr>
+          <tr class="my-primary-text">
+            <td colspan="3" style="text-align: right;">Sub:</td>
+            <td class="my-primary-text" style="text-align: right;">{{total | currency:'USD':'symbol':'1.2-2'}}</td>
+          </tr>
+          <tr class="my-primary-text">
+            <td colspan="3" style="text-align: right;">Tax:</td>
+            <td class="my-primary-text" style="text-align: right;">{{total * 0.13 | currency:'USD':'symbol':'1.2-2'}}</td>
+          </tr>
+          <tr class="my-primary-text">
+            <td colspan="3" style="text-align: right;">Total:</td>
+            <td class="my-primary-text my-grey-backgroudcolor" style="font-weight: 600;text-align: right;">{{total* 1.13 | currency:'USD':'symbol':'1.2-2'}}</td>
+          </tr>
+        </table>
+      </div>
+
+
+      <div style="text-align:center;" *ngIf="hasItems">
+        <button mat-raised-button type="submit" style="color: #FF5722" (click)="viewPdf()">View PDF</button>
+      </div>
+
+    </form>
+  </mat-card-content>
+</mat-card>
+
+<mat-card-footer>
+  <div align="end" >
+    <span class="my-primary-text custom-font-weight margin-right-5 padding-top-10" >{{ msg }}</span>
+  </div>
+
+</mat-card-footer>
+<!--client side (html page ) ( *ngIf="vendors$ | async; else loading" )loading template not server side-->
+<ng-template #loading class="my-primary-text">Loading Data from server...</ng-template>
